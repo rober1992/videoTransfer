@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Storage App</title>
+    <style>
+body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        form {
+            text-align: center;
+        }
+        .custom-file-upload {
+            border: 2px solid #007bff;
+            display: inline-block;
+            padding: 8px 20px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .custom-file-upload:hover {
+            background-color: #e0e0e0;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        button[type="submit"] {
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            margin-top: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        progress {
+            width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Subir Archivos</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data" onsubmit="showProgress(event)">
+            <label for="file-upload" id="file-upload-label" class="custom-file-upload">Seleccionar Archivo</label>
+            <input id="file-upload" type="file" name="file" accept="video/*" onchange="updateFileName(this)">
+            <button id="upload-btn" type="submit">Subir</button>
+            <progress id="upload-progress" value="0" max="100" style="display: none;"></progress>
+        </form>
+    </div>
+
+    <script>
+        function updateFileName(input) {
+            var label = document.getElementById('file-upload-label');
+            if (input.files.length > 0) {
+                label.innerHTML = '<h3>Archivo Seleccionado:</h3> ' + input.files[0].name;
+            } else {
+                label.innerHTML = 'Seleccionar Archivo';
+            }
+        }
+
+        function showProgress(event) {
+            var progressBar = document.getElementById('upload-progress');
+            progressBar.style.display = 'block';
+
+            var fileInput = document.getElementById('file-upload');
+            var file = fileInput.files[0];
+            var fileSize = file.size;
+
+            var xhr = new XMLHttpRequest();
+            xhr.upload.onprogress = function(event) {
+                if (event.lengthComputable) {
+                    var percentComplete = (event.loaded / fileSize) * 100;
+                    progressBar.value = percentComplete;
+                }
+            };
+
+            setTimeout(function() {
+                xhr.open('POST', '/upload', true);
+                xhr.send(new FormData(event.target));
+            }, 100);
+        }
+    </script>
+</body>
+</html>
