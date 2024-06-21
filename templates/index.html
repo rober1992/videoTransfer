@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cloud Storage App</title>
     <style>
-body {
+        body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
@@ -63,12 +63,18 @@ body {
 <body>
     <div class="container">
         <h1>Subir Archivos</h1>
+        {% if 'username' in session %}
         <form action="/upload" method="post" enctype="multipart/form-data" onsubmit="showProgress(event)">
             <label for="file-upload" id="file-upload-label" class="custom-file-upload">Seleccionar Archivo</label>
             <input id="file-upload" type="file" name="file" accept="video/*" onchange="updateFileName(this)">
             <button id="upload-btn" type="submit">Subir</button>
             <progress id="upload-progress" value="0" max="100" style="display: none;"></progress>
         </form>
+        <a href="/logout">Cerrar Sesión</a>
+        {% else %}
+        <p>Debes iniciar sesión para subir archivos.</p>
+        <a href="/login">Iniciar Sesión</a>
+        {% endif %}
     </div>
 
     <script>
