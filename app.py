@@ -3,11 +3,10 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
-app.secret_key = 'your_secret_key_here'  # Cambia esto por una clave segura en un entorno de producción
+app.secret_key = 'your_secret_key_here' 
 
-# Función para verificar las credenciales del usuario (solo como ejemplo, deberías usar una base de datos real)
 def authenticate(username, password):
-    return username == 'admin' and password == 'admin'  # Cambia esto por una verificación real de las credenciales
+    return username == 'admin' and password == 'admin' 
 
 @app.route('/')
 def index():
@@ -48,7 +47,6 @@ def upload_file():
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
 
-        # Simulate upload progress (this can be replaced with a real implementation)
         for i in range(101):
             update_progress(i)
         
@@ -75,5 +73,4 @@ def download_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
 
 if __name__ == '__main__':
-    app.run(debug=True)
-
+    app.run(host='0.0.0.0', port=5000)
